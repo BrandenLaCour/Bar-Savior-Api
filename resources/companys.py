@@ -9,6 +9,8 @@ companys = Blueprint('companys', 'companys')
 def hello_world():
     return 'hello world companys'
 
+
+## WARNING ***  NEED AUTH ***
 #Create new company
 @companys.route('/', methods=['POST'])
 def create():
@@ -26,7 +28,11 @@ def delete(id):
 
     return jsonify(data={}, message=f"successfully deleted company with id of {id}", status=200),200
 
+#Update route, need to get auth working then only master user can do this.
 @companys.route('/<id>', methods=['PUT'])
 def update(id):
-    update_query = models.Company.update().where(models.Company.id == id)
-    update_query.execute()
+    payload = request.get_json()
+    update_query = models.Company.update(**payload).where(models.Company.id == id)
+    updated_company = models.Company.get_by_id(id)
+    
+    return jsonify(data={}, message=f'succesfully update company {updated_company.name}', status=200),200

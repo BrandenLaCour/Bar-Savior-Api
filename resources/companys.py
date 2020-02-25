@@ -1,16 +1,17 @@
 from flask import Blueprint, jsonify, request
 import models
-from flask_login import current_user, login_required
+from flask_login import current_user, login_required, current_user
 from playhouse.shortcuts import model_to_dict
 
 companys = Blueprint('companys', 'companys')
 
 @companys.route('/', methods=['GET'])
+@login_required
 def hello_world():
+    print('all is well')
     return 'hello world companys'
 
 
-## WARNING ***  NEED AUTH ***
 #Create new company
 @companys.route('/', methods=['POST'])
 def create():
@@ -22,6 +23,7 @@ def create():
 
 #Delete route, MUST make login required, and current_user must be 'master'
 @companys.route('/<id>', methods=['Delete'])
+@login_required
 def delete(id):
     delete_query = models.Company.delete().where(models.Company.id == id)
     delete_query.execute()
@@ -30,6 +32,7 @@ def delete(id):
 
 #Update route, need to get auth working then only master user can do this.
 @companys.route('/<id>', methods=['PUT'])
+@login_required
 def update(id):
     payload = request.get_json()
     update_query = models.Company.update(**payload).where(models.Company.id == id)

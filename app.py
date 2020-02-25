@@ -16,12 +16,16 @@ app.secret_key = 'my secret key'
 login_manager = LoginManager()
 login_manager.init_app(app)
 
-# @login_manager.user_loader
-# def load_user(userId):
-#     try:
-#         return models.User.get
-#     except: 
+@login_manager.user_loader
+def load_user(userid):
+    try:
+        return models.User.get(models.User.id == userid)
+    except models.DoesNotExist:
+        return None
 
+@login_manager.unauthorized_handler
+def unauthorized():
+    return jsonify(data={'error': 'user has not logged in'}, message='you must login to access that resource', status=401), 401
 
 
 CORS(users, origins=['http://localhost:3000'], support_credentials=True)

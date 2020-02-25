@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify, request
 import models
-
+from flask_login import current_user, login_required
 from playhouse.shortcuts import model_to_dict
 
 companys = Blueprint('companys', 'companys')

@@ -25,3 +25,8 @@ def delete(id):
     delete_query.execute()
 
     return jsonify(data={}, message=f"successfully deleted company with id of {id}", status=200),200
+
+@companys.route('/<id>', methods=['PUT'])
+def update(id):
+    update_query = models.Company.update().where(models.Company.id == id)
+    update_query.execute()

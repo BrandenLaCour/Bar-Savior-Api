@@ -21,12 +21,13 @@ def create():
 
     return jsonify(data=created_company_dict, message=f'successfully created company {created_company.name}', status=200), 200
 
-#Delete route, MUST make login required, and current_user must be 'master'
+#Delete route,
 @companys.route('/<id>', methods=['Delete'])
 @login_required
 def delete(id):
     #if current user is master user, allow delete, otherwise don't
     if (current_user.master):
+        #add cascading delete in here
         delete_query = models.Company.delete().where(models.Company.id == id)
         delete_query.execute()
         return jsonify(data={}, message=f"successfully deleted company with id of {id}", status=200),200
@@ -35,7 +36,7 @@ def delete(id):
 
 
 
-#Update route, need to get auth working then only master user can do this.
+#Update route,  **Need a Cascading Delete!!**
 @companys.route('/<id>', methods=['PUT'])
 @login_required
 def update(id):

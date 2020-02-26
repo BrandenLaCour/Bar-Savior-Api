@@ -4,6 +4,7 @@ from resources.users import users
 from resources.companys import companys
 from resources.rooms import rooms
 from resources.tasks import tasks
+from resources.logs import logs
 from flask_login import LoginManager
 from flask_cors import CORS
 
@@ -34,11 +35,13 @@ CORS(users, origins=['http://localhost:3000'], support_credentials=True)
 CORS(companys, origins=['http://localhost:3000'], support_credentials=True)
 CORS(rooms, origins=['http://localhost:3000'], support_credentials=True)
 CORS(tasks, origins=['http://localhost:3000'], support_credentials=True)
+CORS(logs, origins=['http://localhost:3000'], support_credentials=True)
 
 app.register_blueprint(users, url_prefix='/api/v1/users')
 app.register_blueprint(companys, url_prefix='/api/v1/companys')
 app.register_blueprint(rooms, url_prefix='/api/v1/rooms')
 app.register_blueprint(tasks, url_prefix='/api/v1/tasks')
+app.register_blueprint(logs, url_prefix='/api/v1/logs')
 
 @app.route('/', methods=['GET'])
 def hello_world():

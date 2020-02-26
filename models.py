@@ -22,7 +22,7 @@ class User(UserMixin, Model):
     admin = BooleanField(default=False)
     master = BooleanField(default=False)
     position = CharField()
-    companyId = ForeignKeyField(Company, backref='users')
+    company = ForeignKeyField(Company, backref='users')
 
     class Meta():
         database = DATABASE
@@ -30,34 +30,47 @@ class User(UserMixin, Model):
 class Room(Model):
     name= CharField()
     date= DateTimeField(default=datetime.datetime.now)
-    companyId = ForeignKeyField(Company, backref='rooms')
+    company = ForeignKeyField(Company, backref='rooms')
 
     class Meta():
         database= DATABASE
 
 class Task(Model):
     name= CharField()
-    day= CharField(default='')
+    day= CharField(null=True)
     active= BooleanField(default='true')
     date= SmallIntegerField(default=0)
     frequency= CharField(default='daily')
     ##maybe above custom field in the future (daily, weekly, monthly)
     shift = CharField(default='both')
     ##maybe above custom field in the future (both, day, night)
-    roomId= ForeignKeyField(Room, backref='tasks')
-    
+    room= ForeignKeyField(Room, backref='tasks')
+
 
     class Meta():
         database = DATABASE
-    
 
 
+class Log(Model):
+        task=ForeignKeyField(Task, backref='logs')
+        notes = CharField(null=True)
+        status = CharField(default='completed')
+        #status = (completed, needs attention, urgent)
+        user = ForeignKeyField(User, backref='logs')
+        resolvedId = SmallIntegerField(null=True)
+        #above should be users Id that resolved it
+        imageUrl = CharField(null=True)
+        dateAdded = DateTimeField(default=datetime.datetime.now)
+
+        class Meta():
+            database = DATABASE
+        
 
 
 def intialize():
     DATABASE.connect()
     
-    DATABASE.create_tables([User, Company, Room, Task], safe=True)
+    DATABASE.create_tables([User, Company, Room, Task, Log], safe=True)
     print('connected to database if didnt already exist')
 
     DATABASE.close()

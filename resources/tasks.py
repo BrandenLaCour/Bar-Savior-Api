@@ -7,12 +7,24 @@ from playhouse.shortcuts import model_to_dict
 
 tasks = Blueprint('tasks', 'tasks')
 
+#all except the show have to be admin to crud
+
 #Index route 
 @tasks.route('/all', methods=['GET'])
+@login_required
 def show_tasks():
     tasks = models.Task.select()
     tasks_dict = [model_to_dict(task) for task in tasks]
     return jsonify(data=tasks_dict, message='retrieved {} tasks'.format(len(tasks_dict)), status=200), 200
+
+#Show route
+@tasks.route('/<id>', methods=['GET'])
+@login_required
+def show_task(id):
+    task = models.Task.get_by_id(id)
+    task_dict = model_to_dict(task)
+    return jsonify(data=task_dict, message='retrieved task {}'.format(task.name), status=200),200
+
 
 
 #Create route
@@ -29,7 +41,23 @@ def create_task():
     else:
         return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
 
+#Update Task
+@tasks.route('/<id>', methods=["PUT"])
+@login_required
+def update_task(id):
+    payload = request.get_json()
+    if current_user.admin:
+        update_query = models.Task.update(**payload).where(models.Task.id == id)
+        update_query.execute()
+        updated_task = models.Task.get_by_id(id)
+        updated_task_dict = model_to_dict(updated_task)
+        return jsonify(data=updated_task_dict, message=f'successfully updated task with id of {id}', status=200 ), 200
+    else:
+        return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
 
+
+
+#Delete Route
 @tasks.route('/<id>', methods=['Delete'])
 @login_required
 def delete(id):

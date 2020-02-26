@@ -54,12 +54,14 @@ def login():
 
 #Logout
 @users.route('/logout', methods=['GET'])
+@login_required
 def logout():
     logout_user()
     return jsonify(data={}, message='successfully logged out user', status=200), 200
 
 #Update User
 @users.route('/<id>', methods=['PUT'])
+@login_required
 def update(id):
     payload = request.get_json()
     #only update of user is master
@@ -75,6 +77,7 @@ def update(id):
 
 #Delete Route
 @users.route('/<id>', methods=['Delete'])
+@login_required
 def delete(id):
     #delete if the current user is master
     if current_user.master:

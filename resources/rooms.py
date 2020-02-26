@@ -8,10 +8,19 @@ rooms = Blueprint('rooms', 'rooms')
 
 #Index Route
 @rooms.route('/all', methods=['GET'])
+@login_required
 def show_rooms():
     rooms = models.Room.select()
     rooms_dict = [model_to_dict(room) for room in rooms]
     return jsonify(data=rooms_dict, message='retrieved {} rooms'.format(len(rooms_dict)), status=200),200
+
+#Show route
+@rooms.route('/<id>', methods=['GET'])
+@login_required
+def show_room(id):
+    room = models.Room.get_by_id(id)
+    room_dict = model_to_dict(room)
+    return jsonify(data=room_dict, message='retrieved room {}'.format(room.name), status=200),200
 
 #Create Route
 @rooms.route('/', methods=['POST'])
@@ -43,6 +52,7 @@ def update_room(id):
 
 #Delete Route
 @rooms.route('/<id>', methods=['Delete'])
+@login_required
 def delete_room(id):
     #only delete if admin
     if current_user.admin:

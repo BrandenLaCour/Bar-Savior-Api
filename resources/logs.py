@@ -40,7 +40,7 @@ def create_logs():
     else:
         return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
 
-#Update logs
+#Update logs (May not need)
 @logs.route('/<id>', methods=["PUT"])
 @login_required
 def update_logs(id):

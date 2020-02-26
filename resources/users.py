@@ -13,7 +13,8 @@ users = Blueprint('users', 'users')
 def hello_world():
     
     return 'users hello world'
-#Create User
+
+#Create User  (may need more authentication to make sure only admins can make users)
 @users.route('/register', methods=['POST'])
 def register():
     payload = request.get_json()
@@ -64,8 +65,8 @@ def logout():
 @login_required
 def update(id):
     payload = request.get_json()
-    #only update of user is master
-    if current_user.master:
+    #only update of user is admin
+    if current_user.admin:
         update_query = models.User.update(**payload).where(models.User.id == id)
         update_query.execute()
         updated_user = models.User.get_by_id(id)
@@ -79,8 +80,8 @@ def update(id):
 @users.route('/<id>', methods=['Delete'])
 @login_required
 def delete(id):
-    #delete if the current user is master
-    if current_user.master:
+    #delete if the current user is admin
+    if current_user.admin:
         delete_query = models.User.delete().where(models.User.id == id)
         delete_query.execute()
         return jsonify(data={}, message='sucessfully deleted user with id {}'.format(id), status=200), 200

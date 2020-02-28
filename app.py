@@ -31,11 +31,11 @@ def unauthorized():
     return jsonify(data={'error': 'user has not logged in'}, message='you must login to access that resource', status=401), 401
 
 
-CORS(users, origins=['http://localhost:3000'], support_credentials=True)
-CORS(companys, origins=['http://localhost:3000'], support_credentials=True)
-CORS(rooms, origins=['http://localhost:3000'], support_credentials=True)
-CORS(tasks, origins=['http://localhost:3000'], support_credentials=True)
-CORS(logs, origins=['http://localhost:3000'], support_credentials=True)
+CORS(users, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(companys, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(rooms, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(tasks, origins=['http://localhost:3000'], supports_credentials=True)
+CORS(logs, origins=['http://localhost:3000'], supports_credentials=True)
 
 app.register_blueprint(users, url_prefix='/api/v1/users')
 app.register_blueprint(companys, url_prefix='/api/v1/companys')

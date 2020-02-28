@@ -40,7 +40,7 @@ def delete(id):
         # subqueries to delete logs by the company. first gather all rooms by company, then do subqueries to see if logs, tasks, and rooms are inside that array, if so, delete them.
 
         companysRooms = models.Room.select().where(models.Room.company == id)
-        delete_logs_query = models.Log.delete().where(models.Log.task.in_(companysRooms)).execute()
+        delete_logs_query = models.Log.delete().where(models.Log.task.in_(companysRooms)).execute() 
         delete_tasks_query = models.Task.delete().where(models.Task.room.in_(companysRooms)).execute()
         delete_rooms = [room.delete_instance() for room in companysRooms]
         delete_users_query = models.User.delete().where(models.User.company == id).execute()

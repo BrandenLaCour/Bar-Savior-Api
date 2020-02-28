@@ -16,7 +16,7 @@ class Company(Model):
 
 
 class User(UserMixin, Model):
-    username = CharField(unique=True)
+    username = CharField()
     password = CharField()
     email = CharField(unique=True)
     admin = BooleanField(default=False)

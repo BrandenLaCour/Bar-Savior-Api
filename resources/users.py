@@ -31,7 +31,7 @@ def register():
     print('is the payload')
     try:
         models.User.get(models.User.email == payload['email'])
-        return jsonify(data={}, message='email already exists', status=200), 200
+        return jsonify(data={}, message='email already exists', status=401), 401
 
 
     except models.DoesNotExist:
@@ -58,11 +58,11 @@ def login():
             login_user(user)
             return jsonify(data=user_dict, message='sucessfully logged in user', status=200), 200
         else:
-            return jsonify(data={}, message='email or password incorrect', status=200), 200
+            return jsonify(data={}, message='email or password incorrect', status=401), 401
 
 
     except models.DoesNotExist:
-        return jsonify(data={}, message='email does not exist', status=200), 200
+        return jsonify(data={}, message='email does not exist', status=401), 401
 
 #Logout
 @users.route('/logout', methods=['GET'])
@@ -85,7 +85,7 @@ def update(id):
         return jsonify(data=updated_user_dict, message='succesfully update user {}'.format(updated_user.email), status=200), 200
 
     else:
-        return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
+        return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401
 
 #Delete Route
 @users.route('/<id>', methods=['Delete'])
@@ -97,4 +97,4 @@ def delete(id):
         delete_query.execute()
         return jsonify(data={}, message='sucessfully deleted user with id {}'.format(id), status=200), 200
     else:
-        return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
+        return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401

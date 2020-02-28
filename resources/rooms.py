@@ -29,7 +29,7 @@ def create_room():
     payload = request.get_json()
     #Only create if admin
     if current_user.admin:
-        created_room = models.Room.create(name=payload['name'], companyId=current_user.companyId)
+        created_room = models.Room.create(name=payload['name'], company=current_user.company)
         created_room_dict = model_to_dict(created_room)
         return jsonify(data=created_room_dict, message=f'successfully created room {created_room.name}', status=200),200
     else:

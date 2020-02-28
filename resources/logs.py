@@ -33,9 +33,9 @@ def create_logs():
     payload= request.get_json()
     
     if current_user.admin:
-        created_logs = models.Log.create(**payload)
-        created_logs_dict = model_to_dict(created_logs)
-        return jsonify(data=created_logs_dict, message=f'succesfully created logs \"{created_logs.name}\" ')
+        created_log = models.Log.create(**payload)
+        created_log_dict = model_to_dict(created_log)
+        return jsonify(data=created_log_dict, message=f'succesfully created log for \"{created_log.task.name}\" ')
 
     else:
         return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200

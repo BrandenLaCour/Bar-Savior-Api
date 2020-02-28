@@ -14,6 +14,15 @@ def hello_world():
     
     return 'users hello world'
 
+#Index Route
+@users.route('/all', methods=['GET'])
+@login_required
+def show_users():
+    users = models.User.select()
+    users_dict = [model_to_dict(user) for user in users]
+    return jsonify(data=users_dict, message='retrieved {} users'.format(len(users_dict)), status=200),200
+
+
 #Create User  (may need more authentication to make sure only admins can make users)
 @users.route('/register', methods=['POST'])
 def register():

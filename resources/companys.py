@@ -11,6 +11,15 @@ def hello_world():
     print('all is well')
     return 'hello world companys'
 
+#Index Route
+@companys.route('/all', methods=['GET'])
+@login_required
+def show_companys():
+    companys = models.Company.select()
+    companys_dict = [model_to_dict(company) for company in companys]
+    return jsonify(data=companys_dict, message='retrieved {} companys'.format(len(companys_dict)), status=200),200
+
+
 
 #Create new company
 @companys.route('/', methods=['POST'])
@@ -27,10 +36,17 @@ def create():
 def delete(id):
     #if current user is master user, allow delete, otherwise don't
     if (current_user.master):
-        #add cascading delete in here
-        delete_query = models.Company.delete().where(models.Company.id == id)
-        delete_query.execute()
-        return jsonify(data={}, message=f"successfully deleted company with id of {id}", status=200),200
+        #destroy all data from company
+        # subqueries to delete logs by the company. first gather all rooms by company, then do subqueries to see if logs, tasks, and rooms are inside that array, if so, delete them.
+
+        companysRooms = models.Room.select().where(models.Room.company == id)
+        delete_logs_query = models.Log.delete().where(models.Log.task.in_(companysRooms)).execute()
+        delete_tasks_query = models.Task.delete().where(models.Task.room.in_(companysRooms)).execute()
+        delete_rooms = [room.delete_instance() for room in companysRooms]
+        delete_users_query = models.User.delete().where(models.User.company == id).execute()
+        delete_query = models.Company.delete().where(models.Company.id == id).execute()
+ 
+        return jsonify(data={}, message=f"successfully destroyed company with id of {id}", status=200),200
     else: 
         return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
 

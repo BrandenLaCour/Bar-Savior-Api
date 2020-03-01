@@ -15,11 +15,12 @@ def hello_world():
     return 'users hello world'
 
 #Index Route
-@users.route('/all', methods=['GET'])
+@users.route('/all/<companyId>', methods=['GET'])
 @login_required
-def show_users():
-    users = models.User.select()
+def show_users(companyId):
+    users = models.User.select().where(models.User.company == companyId)
     users_dict = [model_to_dict(user) for user in users]
+    users_no_pass = [user.pop('password') for user in users_dict]
     return jsonify(data=users_dict, message='retrieved {} users'.format(len(users_dict)), status=200),200
 
 

@@ -39,9 +39,12 @@ def register():
         created_user = models.User.create(**payload)
         created_user.password = generate_password_hash(payload['password'])
         created_user.save()
-        login_user(created_user)
         created_user_dict = model_to_dict(created_user)
         created_user_dict.pop('password')
+
+        if not current_user.is_authenticated:
+            #only add user to current session if there is no user already in session
+            login_user(created_user)
         return jsonify(data=created_user_dict, message=f'succesffully created user {created_user.username}', status=200), 200
 
 
@@ -92,6 +95,7 @@ def update(id):
 @users.route('/<id>', methods=['Delete'])
 @login_required
 def delete(id):
+    print(current_user.username)
     #delete if the current user is admin
     if current_user.admin:
         delete_query = models.User.delete().where(models.User.id == id)

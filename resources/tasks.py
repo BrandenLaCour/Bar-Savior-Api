@@ -10,10 +10,10 @@ tasks = Blueprint('tasks', 'tasks')
 #all except the show have to be admin to crud
 
 #Index route 
-@tasks.route('/all', methods=['GET'])
+@tasks.route('/all/<roomid>', methods=['GET'])
 @login_required
-def show_tasks():
-    tasks = models.Task.select()
+def show_tasks(roomid):
+    tasks = models.Task.select().where(models.Task.room == roomid)
     tasks_dict = [model_to_dict(task) for task in tasks]
     return jsonify(data=tasks_dict, message='retrieved {} tasks'.format(len(tasks_dict)), status=200), 200
 

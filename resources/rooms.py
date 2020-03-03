@@ -7,10 +7,10 @@ from playhouse.shortcuts import model_to_dict
 rooms = Blueprint('rooms', 'rooms')
 
 #Index Route
-@rooms.route('/all', methods=['GET'])
+@rooms.route('/all/<companyid>', methods=['GET'])
 @login_required
-def show_rooms():
-    rooms = models.Room.select()
+def show_rooms(companyid):
+    rooms = models.Room.select().where(models.Room.company == companyid)
     rooms_dict = [model_to_dict(room) for room in rooms]
     return jsonify(data=rooms_dict, message='retrieved {} rooms'.format(len(rooms_dict)), status=200),200
 

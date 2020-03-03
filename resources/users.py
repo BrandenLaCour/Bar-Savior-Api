@@ -15,10 +15,10 @@ def hello_world():
     return 'users hello world'
 
 #Index Route
-@users.route('/all/<companyId>', methods=['GET'])
+@users.route('/all/<companyid>', methods=['GET'])
 @login_required
-def show_users(companyId):
-    users = models.User.select().where(models.User.company == companyId)
+def show_users(companyid):
+    users = models.User.select().where(models.User.company == companyid)
     users_dict = [model_to_dict(user) for user in users]
     users_no_pass = [user.pop('password') for user in users_dict]
     return jsonify(data=users_dict, message='retrieved {} users'.format(len(users_dict)), status=200),200
@@ -36,6 +36,7 @@ def register():
 
 
     except models.DoesNotExist:
+        print(payload)
         created_user = models.User.create(**payload)
         created_user.password = generate_password_hash(payload['password'])
         created_user.save()

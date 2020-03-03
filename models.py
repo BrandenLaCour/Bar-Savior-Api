@@ -41,6 +41,7 @@ class Task(Model):
     active= BooleanField(default='true')
     date= SmallIntegerField(default=0)
     frequency= CharField(default='daily')
+    imgReq = BooleanField(default='false')
     ##maybe above custom field in the future (daily, weekly, monthly)
     shift = CharField(default='both')
     ##maybe above custom field in the future (both, day, night)

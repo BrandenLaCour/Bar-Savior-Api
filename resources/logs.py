@@ -31,6 +31,7 @@ def show_logs(id):
 @login_required
 def create_logs():
     payload= request.get_json()
+    print(payload)
     
     if current_user.admin:
         created_log = models.Log.create(**payload)

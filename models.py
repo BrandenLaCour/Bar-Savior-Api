@@ -56,7 +56,7 @@ class Log(Model):
         task=ForeignKeyField(Task, backref='logs')
         notes = CharField(null=True)
         status = CharField(default='completed')
-        #status = (completed, needs attention, urgent)
+        #status = (okay, attention, urgent)
         user = ForeignKeyField(User, backref='logs')
         resolvedId = SmallIntegerField(null=True)
         #above should be users Id that resolved it

@@ -1,4 +1,5 @@
 import os
+import models
 from flask import Flask, Blueprint, jsonify
 from resources.users import users
 from resources.companys import companys
@@ -7,7 +8,7 @@ from resources.tasks import tasks
 from resources.logs import logs
 from flask_login import LoginManager
 from flask_cors import CORS
-import models
+
 
 PORT = 8000
 DEBUG = True

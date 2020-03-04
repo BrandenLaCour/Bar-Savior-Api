@@ -74,7 +74,7 @@ class Log(Model):
         
 
 
-def intialize():
+def initialize():
     DATABASE.connect()
     
     DATABASE.create_tables([User, Company, Room, Task, Log], safe=True)

@@ -1,3 +1,4 @@
+import os
 from flask import Flask, Blueprint, jsonify
 import models
 from resources.users import users
@@ -48,7 +49,9 @@ def hello_world():
     return 'hello world'
 
 
-
+if 'ON_HEROKU' in os.environ: 
+  print('\non heroku!')
+  models.initialize()
 
 if __name__ == '__main__':
     models.intialize()

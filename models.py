@@ -1,3 +1,4 @@
+import os
 from peewee import *
 import datetime
 
@@ -6,6 +7,11 @@ from playhouse.db_url import connect
 
 DATABASE = SqliteDatabase('bar-savior.sqlite')
 
+if 'ON_HEROKU' in os.environ: 
+                             
+  DATABASE = connect(os.environ.get('DATABASE_URL'))
+else:
+  DATABASE = SqliteDatabase('bar-savior.sqlite')
 
 class Company(Model):
     name = CharField()
@@ -60,7 +66,7 @@ class Log(Model):
         user = ForeignKeyField(User, backref='logs')
         resolvedId = SmallIntegerField(null=True)
         #above should be users Id that resolved it
-        imageUrl = CharField(null=True)
+        imageId = CharField(null=True)
         dateAdded = DateTimeField(default=datetime.datetime.now)
 
         class Meta():

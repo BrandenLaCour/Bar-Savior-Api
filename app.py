@@ -1,6 +1,5 @@
 import os
 from flask import Flask, Blueprint, jsonify
-import models
 from resources.users import users
 from resources.companys import companys
 from resources.rooms import rooms
@@ -8,6 +7,7 @@ from resources.tasks import tasks
 from resources.logs import logs
 from flask_login import LoginManager
 from flask_cors import CORS
+import models
 
 PORT = 8000
 DEBUG = True
@@ -54,5 +54,5 @@ if 'ON_HEROKU' in os.environ:
   models.initialize()
 
 if __name__ == '__main__':
-    models.intialize()
+    models.initialize()
     app.run(debug=DEBUG, port=PORT)

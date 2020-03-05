@@ -9,11 +9,12 @@ logs = Blueprint('logs', 'logs')
 
 #all except the show have to be admin to crud
 
-# Index route 
-@logs.route('/all', methods=['GET'])
+# Index route for that companys logs
+@logs.route('/all/<companyid>', methods=['GET'])
 @login_required
-def show_log():
-    logs = models.Log.select()
+def show_log(companyid):
+    companysRooms = models.Room.select().where(models.Room.company == companyid)
+    logs = models.Log.select().where(models.Log.task.in_(companysRooms))
     logs_dict = [model_to_dict(logs) for logs in logs]
     return jsonify(data=logs_dict, message='retrieved {} logs'.format(len(logs_dict)), status=200), 200
 

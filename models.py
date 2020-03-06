@@ -28,6 +28,7 @@ class User(UserMixin, Model):
     admin = BooleanField(default=False)
     master = BooleanField(default=False)
     position = CharField()
+    active = BooleanField(default=True)
     company = ForeignKeyField(Company, backref='users')
 
     class Meta():

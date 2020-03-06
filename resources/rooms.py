@@ -42,7 +42,7 @@ def deactivate_room(id):
     payload = request.get_json()
     #only update if admin
     if current_user.admin:
-        update_query = models.Task.update(active=False).where(models.Task.room == id).execute()
+        update_query = models.Task.update(active=payload["active"]).where(models.Task.room == id).execute()
         update_query = models.Room.update(active=False).where(models.Room.id == id).execute()
         updated_room = models.Room.get_by_id(id)
         return jsonify(data=updated_room.name, message=f'successfully update room {updated_room.name}', status=200),200

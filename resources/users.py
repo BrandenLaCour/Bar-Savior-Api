@@ -56,14 +56,17 @@ def login():
 
     try:
         user = models.User.get(models.User.email == payload['email'])
-        user_dict = model_to_dict(user)
-        user_dict.pop('password')
-        password_good = check_password_hash(user.password, payload['password'])
-        if password_good:
-            login_user(user)
-            return jsonify(data=user_dict, message='sucessfully logged in user', status=200), 200
+        if user.active == True:
+            user_dict = model_to_dict(user)
+            user_dict.pop('password')
+            password_good = check_password_hash(user.password, payload['password'])
+            if password_good:
+                login_user(user)
+                return jsonify(data=user_dict, message='sucessfully logged in user', status=200), 200
+            else:
+                return jsonify(data={}, message='email or password incorrect', status=401), 401
         else:
-            return jsonify(data={}, message='email or password incorrect', status=401), 401
+            return jsonify(data={}, message='user deactivated', status=401), 401
 
 
     except models.DoesNotExist:
@@ -76,11 +79,30 @@ def logout():
     logout_user()
     return jsonify(data={}, message='successfully logged out user', status=200), 200
 
+#Deactivate user route instead of delete
+@users.route('/deactivate/<id>', methods=['PUT'])
+@login_required
+def deactivate(id):
+    payload = request.get_json()
+    
+    if current_user.admin:
+        update_query = models.User.update(active=False).where(models.User.id == id)
+        #harcoded for now, need to fix as payload doesnt give false for some reason
+        update_query.execute()
+        updated_user = models.User.get_by_id(id)
+        updated_user_dict = model_to_dict(updated_user)
+        return jsonify(data=updated_user_dict, message='succesfully deactivated user {}'.format(updated_user.email), status=200), 200
+
+    else:
+        return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401
+
+
 #Update User
 @users.route('/<id>', methods=['PUT'])
 @login_required
 def update(id):
     payload = request.get_json()
+ 
     #only update of user is admin
     if current_user.admin:
         update_query = models.User.update(**payload).where(models.User.id == id)

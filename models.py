@@ -68,7 +68,7 @@ class Log(Model):
         #above should be users Id that resolved it
         imageId = CharField(null=True)
         dateAdded = DateTimeField(default=datetime.datetime.now)
-
+        urgent = BooleanField(default=False)
         class Meta():
             database = DATABASE
         

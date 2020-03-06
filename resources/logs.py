@@ -46,9 +46,9 @@ def create_logs():
 @logs.route('/<id>', methods=["PUT"])
 @login_required
 def update_logs(id):
-    payload = request.get_json()
+    #only ever update log to not urgent, as there is a new log every entry, when urgent is true, its shows up on urgent page
     if current_user.admin:
-        update_query = models.Log.update(**payload).where(models.Log.id == id)
+        update_query = models.Log.update({"urgent": False}).where(models.Log.id == id)
         update_query.execute()
         updated_logs = models.Log.get_by_id(id)
         updated_logs_dict = model_to_dict(updated_logs)

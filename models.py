@@ -37,7 +37,7 @@ class Room(Model):
     name= CharField()
     date= DateTimeField(default=datetime.datetime.now)
     company = ForeignKeyField(Company, backref='rooms')
-
+    active= BooleanField(default='true')
     class Meta():
         database= DATABASE
 

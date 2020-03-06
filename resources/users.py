@@ -114,7 +114,7 @@ def update(id):
     else:
         return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401
 
-#Delete Route
+#Delete Routes
 @users.route('/<id>', methods=['Delete'])
 @login_required
 def delete(id):

@@ -34,7 +34,7 @@ def create():
 @companys.route('/<id>', methods=['Delete'])
 @login_required
 def delete(id):
-    #if current user is master user, allow delete, otherwise don't
+    #if current user is master user, allow delete, otherwise dont
     if (current_user.master):
         #destroy all data from company
         # subqueries to delete logs by the company. first gather all rooms by company, then do subqueries to see if logs, tasks, and rooms are inside that array, if so, delete them.

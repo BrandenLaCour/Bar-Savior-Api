@@ -18,7 +18,7 @@ def hello_world():
 @members.route('/all/<companyid>', methods=['GET'])
 @login_required
 def show_users(companyid):
-    users = models.User.select().where(models.User.company == companyid)
+    users = models.Member.select().where(models.Member.company == companyid)
     users_dict = [model_to_dict(user) for user in users]
     users_no_pass = [user.pop('password') for user in users_dict]
     return jsonify(data=users_dict, message='retrieved {} users'.format(len(users_dict)), status=200),200
@@ -30,13 +30,13 @@ def register():
     payload = request.get_json(force=True)
 
     try:
-        models.User.get(models.User.email == payload["email"])
+        models.User.get(models.Member.email == payload["email"])
         return jsonify(data={}, message='email already exists', status=401), 401
 
 
     except models.DoesNotExist:
        
-        created_user = models.User.create(**payload)
+        created_user = models.Member.create(**payload)
         created_user.password = generate_password_hash(payload['password'])
         created_user.save()
         created_user_dict = model_to_dict(created_user)
@@ -54,7 +54,7 @@ def login():
     payload = request.get_json(force=True)
 
     try:
-        user_query = models.User.get(models.User.email == payload['email'])
+        user_query = models.Member.get(models.Member.email == payload['email'])
         if user_query.active == True:
             user_dict = model_to_dict(user_query)
             user_dict.pop('password')
@@ -85,10 +85,10 @@ def deactivate(id):
     payload = request.get_json(force=True)
     
     if current_user.admin:
-        update_query = models.User.update(active=False).where(models.User.id == id)
+        update_query = models.Member.update(active=False).where(models.User.id == id)
         #harcoded for now, need to fix as payload doesnt give false for some reason
         update_query.execute()
-        updated_user = models.User.get_by_id(id)
+        updated_user = models.Member.get_by_id(id)
         updated_user_dict = model_to_dict(updated_user)
         return jsonify(data=updated_user_dict, message='succesfully deactivated user {}'.format(updated_user.email), status=200), 200
 
@@ -104,9 +104,9 @@ def update(id):
  
     #only update of user is admin
     if current_user.admin:
-        update_query = models.User.update(**payload).where(models.User.id == id)
+        update_query = models.Member.update(**payload).where(models.User.id == id)
         update_query.execute()
-        updated_user = models.User.get_by_id(id)
+        updated_user = models.Member.get_by_id(id)
         updated_user_dict = model_to_dict(updated_user)
         return jsonify(data=updated_user_dict, message='succesfully update user {}'.format(updated_user.email), status=200), 200
 
@@ -120,7 +120,7 @@ def delete(id):
     print(current_user.username)
     #delete if the current user is admin
     if current_user.admin:
-        delete_query = models.User.delete().where(models.User.id == id)
+        delete_query = models.Member.delete().where(models.User.id == id)
         delete_query.execute()
         return jsonify(data={}, message='sucessfully deleted user with id {}'.format(id), status=200), 200
     else:

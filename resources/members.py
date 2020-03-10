@@ -30,7 +30,7 @@ def register():
     payload = request.get_json(force=True)
 
     try:
-        models.User.get(models.Member.email == payload["email"])
+        models.Member.get(models.Member.email == payload["email"])
         return jsonify(data={}, message='email already exists', status=401), 401
 
 

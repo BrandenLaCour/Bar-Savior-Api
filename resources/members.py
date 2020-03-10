@@ -85,7 +85,7 @@ def deactivate(id):
     payload = request.get_json(force=True)
     
     if current_user.admin:
-        update_query = models.Member.update(active=False).where(models.User.id == id)
+        update_query = models.Member.update(active=False).where(models.Member.id == id)
         #harcoded for now, need to fix as payload doesnt give false for some reason
         update_query.execute()
         updated_user = models.Member.get_by_id(id)
@@ -104,7 +104,7 @@ def update(id):
  
     #only update of user is admin
     if current_user.admin:
-        update_query = models.Member.update(**payload).where(models.User.id == id)
+        update_query = models.Member.update(**payload).where(models.Member.id == id)
         update_query.execute()
         updated_user = models.Member.get_by_id(id)
         updated_user_dict = model_to_dict(updated_user)
@@ -120,7 +120,7 @@ def delete(id):
     print(current_user.username)
     #delete if the current user is admin
     if current_user.admin:
-        delete_query = models.Member.delete().where(models.User.id == id)
+        delete_query = models.Member.delete().where(models.Member.id == id)
         delete_query.execute()
         return jsonify(data={}, message='sucessfully deleted user with id {}'.format(id), status=200), 200
     else:

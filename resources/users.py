@@ -30,7 +30,7 @@ def register():
     payload = request.get_json()
 
     try:
-        models.User.get(models.User.email == payload['email'])
+        models.User.get(models.User.email == payload["email"])
         return jsonify(data={}, message='email already exists', status=401), 401
 
 
@@ -54,13 +54,13 @@ def login():
     payload = request.get_json()
 
     try:
-        user = models.User.get(models.User.email == payload['email'])
-        if user.active == True:
-            user_dict = model_to_dict(user)
+        user_query = models.User.get(models.User.email == payload['email'])
+        if user_query.active == True:
+            user_dict = model_to_dict(user_query)
             user_dict.pop('password')
-            password_good = check_password_hash(user.password, payload['password'])
+            password_good = check_password_hash(user_query.password, payload['password'])
             if password_good:
-                login_user(user)
+                login_user(user_query)
                 return jsonify(data=user_dict, message='sucessfully logged in user', status=200), 200
             else:
                 return jsonify(data={}, message='email or password incorrect', status=401), 401

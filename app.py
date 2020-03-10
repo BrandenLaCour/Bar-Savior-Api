@@ -1,6 +1,6 @@
 import os
 import models
-from flask import Flask, Blueprint, jsonify
+from flask import Flask, Blueprint, jsonify, request
 from resources.members import members
 from resources.companys import companys
 from resources.rooms import rooms

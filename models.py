@@ -21,7 +21,7 @@ class Company(Model):
         database = DATABASE
 
 
-class User(UserMixin, Model):
+class Member(UserMixin, Model):
     username = CharField()
     password = CharField()
     email = CharField(unique=True)
@@ -29,7 +29,7 @@ class User(UserMixin, Model):
     master = BooleanField(default=False)
     position = CharField()
     active = BooleanField(default=True)
-    company = ForeignKeyField(Company, backref='users')
+    company = ForeignKeyField(Company, backref='members')
 
     class Meta():
         database = DATABASE
@@ -64,7 +64,7 @@ class Log(Model):
         notes = CharField(null=True)
         status = CharField(default='completed')
         #status = (okay, attention, urgent)
-        user = ForeignKeyField(User, backref='logs')
+        user = ForeignKeyField(Member, backref='logs')
         resolvedId = SmallIntegerField(null=True)
         #above should be users Id that resolved it
         imageId = CharField(null=True)
@@ -78,7 +78,7 @@ class Log(Model):
 def initialize():
     DATABASE.connect()
     
-    DATABASE.create_tables([User, Company, Room, Task, Log], safe=True)
+    DATABASE.create_tables([Member, Company, Room, Task, Log], safe=True)
     print('connected to database if didnt already exist')
 
     DATABASE.close()

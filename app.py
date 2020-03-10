@@ -1,7 +1,7 @@
 import os
 import models
 from flask import Flask, Blueprint, jsonify
-from resources.users import users
+from resources.members import members
 from resources.companys import companys
 from resources.rooms import rooms
 from resources.tasks import tasks
@@ -33,13 +33,13 @@ def unauthorized():
     return jsonify(data={'error': 'user has not logged in'}, message='you must login to access that resource', status=401), 401
 
 
-CORS(users, origins=['http://localhost:3000', 'https://bar-savior-app.herokuapp.com'], supports_credentials=True)
+CORS(members, origins=['http://localhost:3000', 'https://bar-savior-app.herokuapp.com'], supports_credentials=True)
 CORS(companys, origins=['http://localhost:3000', 'https://bar-savior-app.herokuapp.com'], supports_credentials=True)
 CORS(rooms, origins=['http://localhost:3000', 'https://bar-savior-app.herokuapp.com'], supports_credentials=True)
 CORS(tasks, origins=['http://localhost:3000', 'https://bar-savior-app.herokuapp.com'], supports_credentials=True)
 CORS(logs, origins=['http://localhost:3000', 'https://bar-savior-app.herokuapp.com'], supports_credentials=True)
                                             
-app.register_blueprint(users, url_prefix='/api/v1/users')
+app.register_blueprint(members, url_prefix='/api/v1/members')
 app.register_blueprint(companys, url_prefix='/api/v1/companys')
 app.register_blueprint(rooms, url_prefix='/api/v1/rooms')
 app.register_blueprint(tasks, url_prefix='/api/v1/tasks')

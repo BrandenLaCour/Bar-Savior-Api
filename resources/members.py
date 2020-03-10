@@ -6,16 +6,16 @@ from flask_bcrypt import check_password_hash, generate_password_hash
 from playhouse.shortcuts import model_to_dict
 
 
-users = Blueprint('users', 'users')
+members = Blueprint('members', 'members')
 
 
-@users.route('/', methods=['Get'])
+@members.route('/', methods=['Get'])
 def hello_world():
     
     return 'users hello world'
 
 #Index Route
-@users.route('/all/<companyid>', methods=['GET'])
+@members.route('/all/<companyid>', methods=['GET'])
 @login_required
 def show_users(companyid):
     users = models.User.select().where(models.User.company == companyid)
@@ -25,7 +25,7 @@ def show_users(companyid):
 
 
 #Create User  (may need more authentication to make sure only admins can make users)
-@users.route('/register', methods=['POST'])
+@members.route('/register', methods=['POST'])
 def register():
     payload = request.get_json()
 
@@ -49,7 +49,7 @@ def register():
 
 
 #Login
-@users.route('/login', methods=['POST'])
+@members.route('/login', methods=['POST'])
 def login():
     payload = request.get_json()
 
@@ -72,14 +72,14 @@ def login():
         return jsonify(data={}, message='email does not exist', status=401), 401
 
 #Logout
-@users.route('/logout', methods=['GET'])
+@members.route('/logout', methods=['GET'])
 @login_required
 def logout():
     logout_user()
     return jsonify(data={}, message='successfully logged out user', status=200), 200
 
 #Deactivate user route instead of delete
-@users.route('/deactivate/<id>', methods=['PUT'])
+@members.route('/deactivate/<id>', methods=['PUT'])
 @login_required
 def deactivate(id):
     payload = request.get_json()
@@ -97,7 +97,7 @@ def deactivate(id):
 
 
 #Update User
-@users.route('/<id>', methods=['PUT'])
+@members.route('/<id>', methods=['PUT'])
 @login_required
 def update(id):
     payload = request.get_json()
@@ -114,7 +114,7 @@ def update(id):
         return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401
 
 #Delete Routes
-@users.route('/<id>', methods=['Delete'])
+@members.route('/<id>', methods=['Delete'])
 @login_required
 def delete(id):
     print(current_user.username)

@@ -25,7 +25,8 @@ def show_companys():
 @companys.route('/', methods=['POST'])
 def create():
     payload = request.get_json()
-    created_company = models.Company.create(**payload)
+    print(payload)
+    created_company = models.Company.create(name=payload["name"], address=payload["address"])
     created_company_dict = model_to_dict(created_company)
 
     return jsonify(data=created_company_dict, message=f'successfully created company {created_company.name}', status=200), 200

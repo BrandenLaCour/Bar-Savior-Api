@@ -28,8 +28,7 @@ def show_users(companyid):
 @users.route('/register', methods=['POST'])
 def register():
     payload = request.get_json()
-    print(payload)
-    print('is the payload')
+
     try:
         models.User.get(models.User.email == payload['email'])
         return jsonify(data={}, message='email already exists', status=401), 401

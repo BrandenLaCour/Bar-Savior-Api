@@ -38,14 +38,14 @@ class Room(Model):
     name= CharField()
     date= DateTimeField(default=datetime.datetime.now)
     company = ForeignKeyField(Company, backref='rooms')
-    active= BooleanField(default='true')
+    active= BooleanField(default=True)
     class Meta():
         database= DATABASE
 
 class Task(Model):
     name= CharField()
     day= CharField(null=True)
-    active= BooleanField(default='true')
+    active= BooleanField(default=True)
     date= SmallIntegerField(default=0)
     frequency= CharField(default='daily')
     imgReq = BooleanField(default='false')

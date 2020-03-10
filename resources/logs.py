@@ -15,7 +15,8 @@ logs = Blueprint('logs', 'logs')
 def show_log(companyid):
     companysRooms = models.Room.select().where(models.Room.company == companyid)
     logs = models.Log.select().where(models.Log.task.in_(companysRooms))
-    logs_dict = [model_to_dict(logs) for logs in logs]
+    logs_dict = [model_to_dict(log) for log in logs]
+    print(logs_dict)
     return jsonify(data=logs_dict, message='retrieved {} logs'.format(len(logs_dict)), status=200), 200
 
 # #Show route

@@ -38,7 +38,7 @@ CORS(companys, origins=['http://localhost:3000', 'https://bar-savior-app.herokua
 CORS(rooms, origins=['http://localhost:3000', 'https://bar-savior-app.herokuapp.com'], supports_credentials=True)
 CORS(tasks, origins=['http://localhost:3000', 'https://bar-savior-app.herokuapp.com'], supports_credentials=True)
 CORS(logs, origins=['http://localhost:3000', 'https://bar-savior-app.herokuapp.com'], supports_credentials=True)
-
+                                            
 app.register_blueprint(users, url_prefix='/api/v1/users')
 app.register_blueprint(companys, url_prefix='/api/v1/companys')
 app.register_blueprint(rooms, url_prefix='/api/v1/rooms')

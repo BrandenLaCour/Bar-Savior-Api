@@ -27,7 +27,7 @@ def show_users(companyid):
 #Create User  (may need more authentication to make sure only admins can make users)
 @members.route('/register', methods=['POST'])
 def register():
-    payload = request.get_json()
+    payload = request.get_json(force=True)
 
     try:
         models.User.get(models.User.email == payload["email"])
@@ -35,7 +35,7 @@ def register():
 
 
     except models.DoesNotExist:
-        print(payload)
+       
         created_user = models.User.create(**payload)
         created_user.password = generate_password_hash(payload['password'])
         created_user.save()
@@ -51,7 +51,7 @@ def register():
 #Login
 @members.route('/login', methods=['POST'])
 def login():
-    payload = request.get_json()
+    payload = request.get_json(force=True)
 
     try:
         user_query = models.User.get(models.User.email == payload['email'])
@@ -82,7 +82,7 @@ def logout():
 @members.route('/deactivate/<id>', methods=['PUT'])
 @login_required
 def deactivate(id):
-    payload = request.get_json()
+    payload = request.get_json(force=True)
     
     if current_user.admin:
         update_query = models.User.update(active=False).where(models.User.id == id)
@@ -100,7 +100,7 @@ def deactivate(id):
 @members.route('/<id>', methods=['PUT'])
 @login_required
 def update(id):
-    payload = request.get_json()
+    payload = request.get_json(force=True)
  
     #only update of user is admin
     if current_user.admin:

@@ -26,7 +26,7 @@ def show_room(id):
 @rooms.route('/', methods=['POST'])
 @login_required
 def create_room():
-    payload = request.get_json()
+    payload = request.get_json(force=True)
     #Only create if admin
     if current_user.admin:
         created_room = models.Room.create(name=payload['name'], company=current_user.company)
@@ -39,7 +39,7 @@ def create_room():
 @rooms.route('/deactivate/<id>', methods=['PUT'])
 @login_required
 def deactivate_room(id):
-    payload = request.get_json()
+    payload = request.get_json(force=True)
     #only update if admin
     if current_user.admin:
         update_query = models.Task.update(active=payload["active"]).where(models.Task.room == id).execute()
@@ -57,7 +57,7 @@ def deactivate_room(id):
 @rooms.route('/<id>', methods=['PUT'])
 @login_required
 def update_room(id):
-    payload = request.get_json()
+    payload = request.get_json(force=True)
     #only update if admin
     if current_user.admin:
         update_query = models.Room.update(name=payload["name"]).where(models.Room.id == id)

@@ -58,7 +58,7 @@ def delete(id):
 @login_required
 def update(id):
     #allow user to update company only if master user
-    payload = request.get_json()
+    payload = request.get_json(force=True)
     if current_user.master:
         update_query = models.Company.update(**payload).where(models.Company.id == id)
         update_query.execute()

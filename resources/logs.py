@@ -32,7 +32,7 @@ def show_logs(id):
 @logs.route('/', methods=['POST'])
 @login_required
 def create_logs():
-    payload= request.get_json()
+    payload= request.get_json(force=True)
     print(payload)
     
     if current_user.admin:

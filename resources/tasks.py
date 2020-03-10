@@ -31,7 +31,7 @@ def show_task(id):
 @tasks.route('/', methods=['POST'])
 @login_required
 def create_task():
-    payload= request.get_json()
+    payload= request.get_json(force=True)
     
     if current_user.admin:
         created_task = models.Task.create(**payload)
@@ -45,7 +45,7 @@ def create_task():
 @tasks.route('/<id>', methods=["PUT"])
 @login_required
 def update_task(id):
-    payload = request.get_json()
+    payload = request.get_json(force=True)
     if current_user.admin:
         update_query = models.Task.update(**payload).where(models.Task.id == id)
         update_query.execute()

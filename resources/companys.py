@@ -27,7 +27,7 @@ def create():
     payload = request.get_json(force=True)
     try:
         models.Company.get(models.Company.name == payload['name'])
-        return jsonify(data={}, message='company with that name already exists', status=200), 200
+        return jsonify(data={}, message='company with that name already exists', status=401), 401
 
     except models.DoesNotExist:
         created_company = models.Company.create(**payload)

@@ -25,11 +25,14 @@ def show_companys():
 @companys.route('/', methods=['POST'])
 def create():
     payload = request.get_json(force=True)
-    print(f'the payload is {payload}')
-    created_company = models.Company.create(**payload)
-    created_company_dict = model_to_dict(created_company)
+    try:
+        models.Company.get(models.Company.name == payload['name'])
+        return jsonify(data={}, message='company with that name already exists', status=200), 200
 
-    return jsonify(data=created_company_dict, message=f'successfully created company {created_company.name}', status=200), 200
+    except models.DoesNotExist:
+        created_company = models.Company.create(**payload)
+        created_company_dict = model_to_dict(created_company)
+        return jsonify(data=created_company_dict, message=f'successfully created company {created_company.name}', status=200), 200
 
 #Delete route,
 @companys.route('/<id>', methods=['Delete'])

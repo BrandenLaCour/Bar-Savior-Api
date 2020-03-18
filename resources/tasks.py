@@ -57,13 +57,14 @@ def update_task(id):
 
 
 
-#Delete Route
-@tasks.route('/<id>', methods=['Delete'])
+#Deactive task
+@tasks.route('/deactivate/<id>', methods=['PUT'])
 @login_required
-def delete(id):
+def deactivate(id):
     if current_user.admin:
-        delete_query = models.Task.delete().where(models.Task.id == id)
-        delete_query.execute()
-        return jsonify(data={}, message='successfully deleted task at id {}'.format(id), status=200), 200
+        update_query = models.Task.update(active=False).where(models.Task.id == id).execute()
+        updated_task = models.Task.get(models.Task.id == id)
+        updated_task_dict = model_to_dict(updated_task)
+        return jsonify(data=updated_task_dict, message='successfully deactivated task at id {}'.format(id), status=200), 200
     else: 
         return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200

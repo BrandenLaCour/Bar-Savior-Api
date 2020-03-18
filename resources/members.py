@@ -21,7 +21,7 @@ def show_users(companyid):
     users = models.Member.select().where(models.Member.company == companyid)
     users_dict = [model_to_dict(user) for user in users]
     users_no_pass = [user.pop('password') for user in users_dict]
-    return jsonify(data=users_no_pass, message='retrieved {} users'.format(len(users_dict)), status=200),200
+    return jsonify(data=users_dict, message='retrieved {} users'.format(len(users_dict)), status=200),200
 
 
 #Create User  (may need more authentication to make sure only admins can make users)

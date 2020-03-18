@@ -57,7 +57,7 @@ def update_task(id):
 
 
 
-#Deactive task
+#Deactivate task
 @tasks.route('/deactivate/<id>', methods=['PUT'])
 @login_required
 def deactivate(id):

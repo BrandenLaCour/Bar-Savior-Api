@@ -52,7 +52,7 @@ def delete(id):
  
         return jsonify(data={}, message=f"successfully destroyed company with id of {id}", status=200),200
     else: 
-        return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
+        return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401
 
 
 
@@ -68,4 +68,4 @@ def update(id):
         updated_company = models.Company.get_by_id(id)
         return jsonify(data={}, message=f'succesfully update company {updated_company.name}', status=200),200
     else:
-        return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
+        return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401

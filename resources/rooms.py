@@ -33,7 +33,7 @@ def create_room():
         created_room_dict = model_to_dict(created_room)
         return jsonify(data=created_room_dict, message=f'successfully created room {created_room.name}', status=200),200
     else:
-        return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
+        return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401
 
 #Deactivate route, instead of delete, deactivate entire room
 @rooms.route('/deactivate/<id>', methods=['PUT'])
@@ -48,7 +48,7 @@ def deactivate_room(id):
         return jsonify(data=updated_room.name, message=f'successfully update room {updated_room.name}', status=200),200
 
     else:
-        return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
+        return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401
 
 
 
@@ -66,7 +66,7 @@ def update_room(id):
         return jsonify(data=updated_room.name, message=f'successfully update room {updated_room.name}', status=200),200
 
     else:
-        return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
+        return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401
 
 
 
@@ -81,6 +81,6 @@ def delete_room(id):
         delete_room_query = models.Room.delete().where(models.Room.id == id).execute()
         return jsonify(data={}, message='successfully deleted room and tasks at id {}'.format(id), status=200), 200
     else:
-        return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
+        return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401
 
         

@@ -41,7 +41,7 @@ def create_logs():
         return jsonify(data=created_log_dict, message=f'succesfully created log for \"{created_log.task.name}\" ')
 
     else:
-        return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
+        return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401
 
 #Update logs (May not need)
 @logs.route('/<id>', methods=["PUT"])
@@ -55,7 +55,7 @@ def update_logs(id):
         updated_logs_dict = model_to_dict(updated_logs)
         return jsonify(data=updated_logs_dict, message=f'successfully updated logs with id of {id}', status=200 ), 200
     else:
-        return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
+        return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401
 
 
 
@@ -68,4 +68,4 @@ def delete(id):
         delete_query.execute()
         return jsonify(data={}, message='successfully deleted logs at id {}'.format(id), status=200), 200
     else: 
-        return jsonify(data={}, message="you don't have the access rights to do that", status=200), 200
+        return jsonify(data={}, message="you don't have the access rights to do that", status=401), 401

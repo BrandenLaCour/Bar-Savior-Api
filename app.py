@@ -15,8 +15,10 @@ DEBUG = True
 
 
 app = Flask(__name__)
-app.config['SESSION_COOKIE_SAMESITE'] = "None"
-app.config['SESSION_COOKIE_SECURE'] = True
+
+if 'ON_HEROKU' in os.environ:
+    app.config['SESSION_COOKIE_SAMESITE'] = "None"
+    app.config['SESSION_COOKIE_SECURE'] = True
 
 
 app.secret_key = 'my secret key'  
